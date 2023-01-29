@@ -4,6 +4,8 @@
 
 #include "Library.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 namespace library {
@@ -17,9 +19,13 @@ namespace library {
         int choice;
         cin >> choice;
         switch (choice) {
-            case 1:
-                cout << "Login";
+            case 1: {
+                map<string, User> user_map = User::loadUsersFromFile();
+
+                const User user = User::login(user_map);
+                cout << user.getUsername() << user.getFirstName();
                 break;
+            }
             case 2:
                 signUp();
                 break;
