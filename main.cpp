@@ -1,11 +1,9 @@
-#include <iostream>
-#include "include/Database.h"
+#include "Library.h"
 
 using namespace std;
 
 int main() {
-    database::Database db;
-    db.insert("users");
-
+    library::Library library;
+    library.start();
     return 0;
 }

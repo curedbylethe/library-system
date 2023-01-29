@@ -6,29 +6,25 @@
 #include <string>
 #include <vector>
 #include "Database.h"
+#include "User.h"
 
 using namespace std;
 namespace database {
     ofstream fileOut;
 
-    void insertUser() {
+    void Database::insertUser(string &username, string &firstName, string &lastName,
+                              string &password, string &birthdate, string &role) {
         fileOut.open("../data/users.txt", ios::out | ios::app);
         if (!fileOut.is_open()) {
             cout << "Error opening file" << endl;
             return;
         }
-        string username, firstName, lastName, password;
-        cout << " ******* Add User *******" << endl;
-        cout << "Enter Username: ";
-        cin >> username;
-        cout << "Enter First Name ";
-        cin >> firstName;
-        cout << "Enter Last Name: ";
-        cin >> lastName;
-        cout << "Enter Password: ";
-        cin >> password;
 
-        fileOut << username << ","
+        user::User user(username, password, firstName, lastName, birthdate);
+
+        fileOut << user.getUuid() << ","
+                << role << ","
+                << username << ","
                 << firstName << ","
                 << lastName << ","
                 << password << ","
@@ -36,7 +32,7 @@ namespace database {
         fileOut.close();
     }
 
-    void insertBook() {
+    void Database::insertBook()  {
         fileOut.open("../data/books.txt", ios::out | ios::app);
         if (!fileOut.is_open()) {
             cout << "Error opening file" << endl;
@@ -107,21 +103,9 @@ namespace database {
         fileOut.close();
     }
 
-    void Database::insert(const std::string &input) {
-        if (input=="users") {
-            insertUser();
-        } else if (input=="books") {
-            insertBook();
-        } else {
-            cout << "Database::insert something went wrong" << endl;
-        }
-    }
-
     Database::~Database() {
-        cout << "Database destructor called" << endl;
     }
 
     Database::Database() {
-        cout << "Database constructor called" << endl;
     }
 } // database
