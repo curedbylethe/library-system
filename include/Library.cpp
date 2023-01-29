@@ -23,7 +23,9 @@ namespace library {
                 map<string, User> user_map = User::loadUsersFromFile();
 
                 const User user = User::login(user_map);
-                cout << user.getUsername() << user.getFirstName();
+//                        user.getRole() == "user" ?
+//                            Library::student() :
+//                            Library::librarian();
                 break;
             }
             case 2:
@@ -33,10 +35,10 @@ namespace library {
                 cout << "Exit";
                 break;
             default:
-                cout << "Invalid choice";
+                cout << "Invalid choice\n";
+                start();
                 break;
         }
-
     }
 
     void Library::signUp() const {
@@ -54,7 +56,8 @@ namespace library {
         cout << "Select a role: ";
         cout << "\n1. User";
         cout << "\n2. Librarian";
-        cout << "\n3. Exit";
+        cout << "\n3. Go back";
+        cout << "\n4. Exit";
         cout << "\nPlease enter your choice: ";
         int choice;
         cin >> choice;
@@ -74,8 +77,12 @@ namespace library {
             case 3:
                 start();
                 break;
+            case 4:
+                cout << "Exit";
+                break;
             default:
                 cout << "Invalid choice";
+                signUp();
                 break;
         }
     }

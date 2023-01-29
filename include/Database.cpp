@@ -27,7 +27,9 @@ namespace library {
                 << firstName << ","
                 << lastName << ","
                 << password << ","
+                << birthdate << ","
                 << endl;
+
         fileOut.close();
     }
 
