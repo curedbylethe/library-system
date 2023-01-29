@@ -4,7 +4,6 @@
 
 #include "Library.h"
 #include <iostream>
-#include "Database.h"
 
 using namespace std;
 namespace library {
@@ -56,13 +55,13 @@ namespace library {
         switch (choice) {
             case 1: {
                 string role = "user";
-                database::Database db;
+                Database db;
                 db.insertUser(username, firstName, lastName, password, birthdate, role);
                 break;
             }
             case 2: {
                 string role = "librarian";
-                database::Database db;
+                Database db;
                 db.insertUser(username, firstName, lastName, password, birthdate, role);
                 break;
             }

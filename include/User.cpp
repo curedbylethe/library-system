@@ -2,8 +2,7 @@
 // Created by Parsa Jahanbani on 1/29/23.
 //
 
-#include "User.h"
-#include "Database.h"
+#include "Library.h"
 #include <iostream>
 #include <random>
 #include <sstream>
@@ -12,7 +11,7 @@
 
 using namespace std;
 
-namespace user {
+namespace library {
 
     User::User() {
         random_device rd;

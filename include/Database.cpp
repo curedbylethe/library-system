@@ -5,11 +5,10 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "Database.h"
-#include "User.h"
+#include "Library.h"
 
 using namespace std;
-namespace database {
+namespace library {
     ofstream fileOut;
 
     void Database::insertUser(string &username, string &firstName, string &lastName,
@@ -20,7 +19,7 @@ namespace database {
             return;
         }
 
-        user::User user(username, password, firstName, lastName, birthdate);
+        User user(username, password, firstName, lastName, birthdate);
 
         fileOut << user.getUuid() << ","
                 << role << ","
