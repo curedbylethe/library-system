@@ -7,7 +7,7 @@ include_directories(include)
 
 add_executable(Library
         main.cpp
-        include/Database.cpp
-        include/User.cpp
+        src/Database.cpp
+        src/User.cpp
         include/Library.cpp
         include/Library.h)
