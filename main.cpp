@@ -3,7 +3,6 @@
 using namespace std;
 
 int main() {
-    library::Library library;
-    library.start();
+    library::Library::start();
     return 0;
 }

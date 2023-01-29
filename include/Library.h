@@ -14,8 +14,10 @@ namespace library {
     public:
         Library();
         ~Library();
-        void signUp() const;
-        void start() const;
+        static void signUp();
+        static void student();
+        static void librarian();
+        static void start();
     };
 
     class Database {
