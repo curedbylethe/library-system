@@ -53,23 +53,60 @@ namespace library {
         return books_map;
     }
 
-    vector<Book> Book::searchBook() {
+    map<string, Book> Book::searchBook() {
         auto future = async(launch::async, &Book::loadBooksFromFile);
         string title;
         cin.ignore();
         cout << "Enter the title of the book: ";
         getline(cin, title);
         map<string, Book> books_map = future.get();
-        vector<Book> results;
+        map<string, Book> results;
         for (const auto &[key, value] : books_map) {
             if (key == title) {
-                results.push_back(value);
+                results[key] = value;
             }
         }
         if (results.empty()) {
             throw runtime_error("Book not found");
         } else {
             return results;
+        }
+    }
+
+    void Book::borrowBook(const User &user, const map<string, Book> *book_map) {
+        auto future = async(launch::async, &Book::loadBooksFromFile);
+        string title;
+        cin.ignore();
+        cout << "Enter the title or ID Number of the book: ";
+        getline(cin, title);
+        map<string, Book> books_map;
+        if (book_map == nullptr) {
+            books_map = future.get();
+        } else {
+            books_map = *book_map;
+        }
+        for (auto &[key, value] : books_map) {
+            if (key == title) {
+                if (value.getStatus() == "free") {
+                    value.setStatus("taken");
+                    value.setBorrower(user.getUuid());
+                    cout << "Book borrowed successfully" << endl;
+                } else {
+                    throw runtime_error("Book is not available");
+                }
+            }
+            else if (value.getIsbn() == title) {
+                if (value.getStatus() == "free") {
+                    value.setStatus("taken");
+                    value.setBorrower(user.getUuid());
+                    cout << "Book borrowed successfully" << endl;
+                } else {
+                    throw runtime_error("Book is not available");
+                }
+            }
+            else {
+                throw runtime_error("Book not found");
+            }
         }
     }
 
@@ -80,6 +117,59 @@ namespace library {
     }
     string Book::getIsbn() const {
         return this->isbn;
+    }
+    string Book::getPublisher() const {
+        return this->publisher;
+    }
+    vector<string> Book::getSubjects() const {
+        return this->subjects;
+    }
+    string Book::getLength() const {
+        return this->length;
+    }
+    string Book::getYear() const {
+        return this->year;
+    }
+    string Book::getStatus() const {
+        return this->status;
+    }
+    string Book::getBorrower() const {
+        return this->borrower;
+    }
+
+    /* Setter */
+    void Book::setStatus(auto &s) {
+        this->status = s;
+    }
+    void Book::setBorrower(auto b) {
+        this->borrower = b;
+    }
+    void Book::setTitle(string &t) {
+        this->title = t;
+    }
+    void Book::setEdition(string &e) {
+        this->edition = e;
+    }
+    void Book::setIsbn(string &id) {
+        this->isbn = id;
+    }
+    void Book::setPublisher(string &p) {
+        this->publisher = p;
+    }
+    void Book::setSubjects(vector<string> &subs) {
+        this->subjects = subs;
+    }
+    void Book::setLength(string &l) {
+        this->length = l;
+    }
+    void Book::setYear(string &y) {
+        this->year = y;
+    }
+    void Book::setAuthors(vector<string> &a) {
+        this->authors = a;
+    }
+    void Book::setShelfNum(string &sheNum) {
+        this->shelfNum = sheNum;
     }
 
     /* Helpers */

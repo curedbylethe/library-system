@@ -22,7 +22,7 @@ namespace library {
             case 1: {
                 const User user = User::login();
                         user.getRole() == "user" ?
-                            Library::student() :
+                            Library::student(user) :
                             Library::librarian();
                 break;
             }
@@ -39,8 +39,7 @@ namespace library {
         }
     }
 
-//    TODO: Actually implement student and librarian functions
-    void Library::student() {
+    void Library::student(const User &user) {
         cout << "Welcome to the Library";
         cout << "\n1. Search";
         cout << "\n2. Borrow";
@@ -53,12 +52,21 @@ namespace library {
             case 1: {
                 const auto books = Book::searchBook();
                 cout << "Books found: " << books.size() << endl;
-                for (auto &book : books) {
+                for (auto &[title, book] : books) {
                     cout << book << endl;
+                }
+                cout << "Do you want to borrow a book? (y/n): ";
+                char y_or_n;
+                cin >> y_or_n;
+                if (y_or_n == 'y') {
+                    Book::borrowBook(user, &books);
+                } else {
+                    student(user);
                 }
                 break;
             }
             case 2:
+                Book::borrowBook(user);
                 cout << "Borrow";
                 break;
             case 3:
@@ -69,7 +77,7 @@ namespace library {
                 break;
             default:
                 cout << "Invalid choice";
-                student();
+                student(user);
                 break;
         }
     }
@@ -130,14 +138,12 @@ namespace library {
         switch (choice) {
             case 1: {
                 string role = "user";
-                Database db;
-                db.insertUser(username, firstName, lastName, password, birthdate, role);
+                Database::insertUser(username, firstName, lastName, password, birthdate, role);
                 break;
             }
             case 2: {
                 string role = "librarian";
-                Database db;
-                db.insertUser(username, firstName, lastName, password, birthdate, role);
+                Database::insertUser(username, firstName, lastName, password, birthdate, role);
                 break;
             }
             case 3:
@@ -164,9 +170,8 @@ namespace library {
     }
 
 
-    Library::Library() {
-    }
+    Library::Library() = default;
 
-    Library::~Library() {
-    }
+    Library::~Library() = default;
+
 } // library
