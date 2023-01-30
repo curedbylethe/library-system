@@ -63,6 +63,7 @@ namespace library {
         this->firstName = firstName;
         this->lastName = lastName;
         this->birthdate = birthdate;
+        this->role = role;
     }
 
     map<string, User> User::loadUsersFromFile() {
