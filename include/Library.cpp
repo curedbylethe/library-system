@@ -20,9 +20,7 @@ namespace library {
         cin >> choice;
         switch (choice) {
             case 1: {
-                map<string, User> user_map = User::loadUsersFromFile();
-
-                const User user = User::login(user_map);
+                const User user = User::login();
                         user.getRole() == "user" ?
                             Library::student() :
                             Library::librarian();

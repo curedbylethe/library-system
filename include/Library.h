@@ -50,8 +50,9 @@ namespace library {
              string &password, string &firstName, string &lastName, string &birthdate);
         User();
         ~User();
-        [[nodiscard]] static map<string, User> loadUsersFromFile();
-        [[nodiscard]] static User login(const map<string, User>& user_map);
+        static pair<string, User> parseUserLine(const string& line);
+        [[nodiscard]]  static map<string, User> loadUsersFromFile();
+        [[nodiscard]] static User login();
 
         /* Getters */
         [[nodiscard]] string getUuid() const;

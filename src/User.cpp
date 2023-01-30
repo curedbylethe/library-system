@@ -8,6 +8,7 @@
 #include <random>
 #include <sstream>
 #include <map>
+#include <future>
 
 using namespace std;
 
@@ -75,29 +76,38 @@ namespace library {
 
         string line;
         while (getline(file, line)) {
-            istringstream iss(line);
-            string uuid, role, username, password, firstname, lastname, birthdate;
-            getline(iss, uuid, ',');
-            getline(iss, role, ',');
-            getline(iss, username, ',');
-            getline(iss, firstname, ',');
-            getline(iss, lastname, ',');
-            getline(iss, password, ',');
-            getline(iss, birthdate);
-            User user(uuid, role, username, password, firstname, lastname, birthdate);
-            user_map[username] = user;
+            auto it = User::parseUserLine(line);
+            user_map[it.first] = it.second;
         }
-
         return user_map;
-
     }
 
-    User User::login(const map<string, User>& user_map) {
+    pair<string, User> User::parseUserLine(const string& line) {
+        pair<string, User> user_map;
+        istringstream iss(line);
+        string uuid, role, username, password, firstname, lastname, birthdate;
+        getline(iss, uuid, ',');
+        getline(iss, role, ',');
+        getline(iss, username, ',');
+        getline(iss, firstname, ',');
+        getline(iss, lastname, ',');
+        getline(iss, password, ',');
+        getline(iss, birthdate);
+        const User user(uuid, role, username, password, firstname, lastname, birthdate);
+        user_map.first = username;
+        user_map.second = user;
+        return user_map;
+    }
+
+
+    User User::login() {
+        auto future = async(launch::async, &User::loadUsersFromFile);
         string username, password;
 
         while (true) {
             cout << "Enter username: ";
             cin >> username;
+            map<string, User> user_map = future.get();
             auto it = user_map.find(username);
             if (it == user_map.end()) {
                 cout << "Username not found" << endl;
