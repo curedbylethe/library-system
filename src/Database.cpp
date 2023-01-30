@@ -2,8 +2,6 @@
 // Created by Parsa Jahanbani on 1/28/23.
 //
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
 #include "Library.h"
 
@@ -28,8 +26,7 @@ namespace library {
                 << lastName << ","
                 << password << ","
                 << birthdate << ","
-                << endl;
-
+                << "NULL" << endl;
         fileOut.close();
     }
 
