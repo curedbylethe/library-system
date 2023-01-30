@@ -169,6 +169,17 @@ namespace library {
         return tokens;
     }
 
+    string Library::join(vector<string> v, char delimiter) {
+            string result = "";
+            for (int i = 0; i < v.size(); i++) {
+                result += v[i];
+                if (i < v.size() - 1) {
+                    result += delimiter;
+                }
+            }
+            return result;
+    }
+
 
     Library::Library() = default;
 
