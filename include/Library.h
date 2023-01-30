@@ -54,6 +54,8 @@ namespace library {
         static void librarian();
         static void start();
         static vector<string> split(const string &str, char del);
+        static string join(vector<string> v, char delimiter);
+
     };
 
     class Database {
@@ -63,6 +65,7 @@ namespace library {
         static void insertUser(string &username, string &firstName, string &lastName,
                                string &password, string &birthdate, string &role);
         static void insertBook();
+        static void setter(string &type, string &identifier, string &column, string &value);
     };
 
 
