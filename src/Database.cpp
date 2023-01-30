@@ -50,14 +50,7 @@ namespace library {
         cout << "Enter Authors (separated by commas): ";
         string line;
         getline(cin, line);
-        size_t start = 0;
-        size_t end = line.find(",");
-        while (end != string::npos) {
-            authors.push_back(line.substr(start, end - start));
-            start = end + 1;
-            end = line.find(",", start);
-        }
-        authors.push_back(line.substr(start, end));
+        authors = Library::split(line, ',');
         cout << "Enter Edition: ";
         cin >> edition;
         cout << "Enter Publisher: ";
@@ -71,14 +64,7 @@ namespace library {
         cin.ignore();
         cout << "Enter Subjects: ";
         getline(cin, line);
-        start = 0;
-        end = line.find(",");
-        while (end != string::npos) {
-            subjects.push_back(line.substr(start, end - start));
-            start = end + 1;
-            end = line.find(",", start);
-        }
-        subjects.push_back(line.substr(start, end));
+        subjects = Library::split(line, ',');
         fileOut << title << ","
                 << shelfNumber << ",";
         for (const auto &author : authors) {
