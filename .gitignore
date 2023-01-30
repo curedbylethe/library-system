@@ -202,6 +202,7 @@ Temporary Items
 .idea/
 
 ### Project specific ###
-data/
+data/*
+!data/schema.txt
 
 # End of https://www.toptal.com/developers/gitignore/api/clion,cmake,c++,macos

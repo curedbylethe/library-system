@@ -1,0 +1,2 @@
+uuid,role,username,firstname,lastname,password,birthdate,borrowed
+title,shelfNumber,author,edition,publisher,publishedYear,ISBN,length,subjects,status,borrower
