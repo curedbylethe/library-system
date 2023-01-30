@@ -90,9 +90,7 @@ namespace library {
         fileOut.close();
     }
 
-    Database::~Database() {
-    }
+    Database::~Database() = default;
 
-    Database::Database() {
-    }
+    Database::Database() = default;
 } // database
