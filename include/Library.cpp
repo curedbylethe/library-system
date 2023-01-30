@@ -5,6 +5,7 @@
 #include "Library.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 namespace library {
@@ -22,9 +23,9 @@ namespace library {
                 map<string, User> user_map = User::loadUsersFromFile();
 
                 const User user = User::login(user_map);
-//                        user.getRole() == "user" ?
-//                            Library::student() :
-//                            Library::librarian();
+                        user.getRole() == "user" ?
+                            Library::student() :
+                            Library::librarian();
                 break;
             }
             case 2:
@@ -51,9 +52,14 @@ namespace library {
         int choice;
         cin >> choice;
         switch (choice) {
-            case 1:
-                cout << "Search";
+            case 1: {
+                const auto books = Book::searchBook();
+                cout << "Books found: " << books.size() << endl;
+                for (auto &book : books) {
+                    cout << book << endl;
+                }
                 break;
+            }
             case 2:
                 cout << "Borrow";
                 break;
@@ -148,6 +154,17 @@ namespace library {
                 break;
         }
     }
+
+    vector<string> Library::split(const string &str, char delimiter) {
+        vector<string> tokens;
+        string token;
+        istringstream tokenStream(str);
+        while (getline(tokenStream, token, delimiter)) {
+            tokens.push_back(token);
+        }
+        return tokens;
+    }
+
 
     Library::Library() {
     }

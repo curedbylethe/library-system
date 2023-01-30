@@ -1,8 +1,8 @@
 #include "Library.h"
 
-using namespace std;
+using namespace library;
 
 int main() {
-    library::Library::start();
+    Library::start();
     return 0;
 }

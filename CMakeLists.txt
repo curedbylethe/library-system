@@ -10,4 +10,5 @@ add_executable(Library
         src/Database.cpp
         src/User.cpp
         include/Library.cpp
-        include/Library.h)
+        include/Library.h
+        src/Book.cpp)
