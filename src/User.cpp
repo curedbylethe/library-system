@@ -94,21 +94,35 @@ namespace library {
     User User::login(const map<string, User>& user_map) {
         string username, password;
 
-        cout << "Enter username: ";
+        while (true) {
+            cout << "Enter username: ";
             cin >> username;
-        cout << "Enter password: ";
+            auto it = user_map.find(username);
+            if (it == user_map.end()) {
+                cout << "Username not found" << endl;
+                continue;
+            }
+            cout << "Enter password: ";
             cin >> password;
-        auto it = user_map.find(username);
-        if (it == user_map.end()) {
-            throw invalid_argument("Username not found");
-        }
+            User user = it->second;
+            if (user.getPassword() != password) {
+                char choice;
+                cout << "Incorrect password" << endl;
+                cout << "\nDo you wish to try again? (y/n): ";
+                cin >> choice;
+                if (choice == 'n') {
+                    Library::start();
+                } else if (choice == 'y') {
+                    continue;
+                } else {
+                    cout << "Invalid choice" << endl;
+                    continue;
+                }
+                continue;
+            }
 
-        User user = it->second;
-        if (user.getPassword() != password) {
-            throw invalid_argument("Incorrect password");
+            return user;
         }
-
-        return user;
     }
 
 
