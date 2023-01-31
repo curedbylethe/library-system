@@ -51,11 +51,7 @@ namespace library {
                 break;
             }
             case 2:
-                if (user.getBorrowed().size() >= 2) {
-                    cout << "You have reached the maximum number of books you can borrow";
-                    student(user);
-                }
-                Book::borrowBook(user);
+                Library::borrow(user);
                 break;
             case 3:
                 cout << "Return";
@@ -190,6 +186,14 @@ namespace library {
             student(user);
         }
 
+    }
+
+    void Library::borrow(User &user) {
+        if (user.getBorrowed().size() >= 2) {
+            cout << "You have reached the maximum number of books you can borrow";
+            student(user);
+        }
+        Book::borrowBook(user);
     }
 
 
