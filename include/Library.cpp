@@ -32,7 +32,7 @@ namespace library {
         getline(cin, bookUuid);
         vector<string> bookUuids = Library::split(bookUuid, ',');
         for (auto &book: bookUuids) {
-            user.returnBook(bookUuid);
+            user.returnBook(book);
             cout << "Do you to return another book? (y/n): ";
             char y_or_n;
             cin >> y_or_n;
