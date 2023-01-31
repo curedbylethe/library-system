@@ -20,10 +20,7 @@ namespace library {
         cin >> choice;
         switch (choice) {
             case 1: {
-                 User user = User::login();
-                        user.getRole() == "user" ?
-                            Library::student(user) :
-                            Library::librarian();
+                Library::login();
                 break;
             }
             case 2:
@@ -50,24 +47,11 @@ namespace library {
         cin >> choice;
         switch (choice) {
             case 1: {
-                auto books = Book::searchBook();
-                cout << "Books found: " << books.size() << endl;
-                for (auto &[title, book] : books) {
-                    cout << book << endl;
-                }
-                cout << "Do you want to borrow a book? (y/n): ";
-                char y_or_n;
-                cin >> y_or_n;
-                if (y_or_n == 'y') {
-                    Book::borrowBook(user, &books);
-                } else {
-                    student(user);
-                }
+                Library::searchForBooks(user);
                 break;
             }
             case 2:
                 Book::borrowBook(user);
-                cout << "Borrow";
                 break;
             case 3:
                 cout << "Return";
@@ -178,6 +162,30 @@ namespace library {
                 }
             }
             return result;
+    }
+
+    void Library::login() {
+        User user = User::login();
+        user.getRole() == "user" ?
+        Library::student(user) :
+        Library::librarian();
+    }
+
+    void Library::searchForBooks(User &user) {
+        auto books = Book::searchBook();
+        cout << "Books found: " << books.size() << endl;
+        for (auto &[title, book] : books) {
+            cout << book << endl;
+        }
+        cout << "Do you want to borrow a book? (y/n): ";
+        char y_or_n;
+        cin >> y_or_n;
+        if (y_or_n == 'y') {
+            Book::borrowBook(user, &books);
+        } else {
+            student(user);
+        }
+
     }
 
 

@@ -65,6 +65,8 @@ namespace library {
         static void student(User &user);
         static void librarian();
         static void start();
+        static void login();
+        static void searchForBooks(User &user);
         static vector<string> split(const string &str, char del);
         static string join(vector<string> v, char delimiter);
 
