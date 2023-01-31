@@ -138,8 +138,7 @@ namespace library {
                 Library::returnBook(user);
             }
             case 4:
-                cout << "Exit";
-                break;
+                exit(0);
             default:
                 cout << "Invalid choice";
                 student(user);
@@ -170,8 +169,7 @@ namespace library {
                 cout << "Remove User";
                 break;
             case 5:
-                cout << "Exit";
-                break;
+                exit(0);
             default:
                 cout << "Invalid choice";
                 librarian();
@@ -214,8 +212,7 @@ namespace library {
                 start();
                 break;
             case 4:
-                cout << "Exit";
-                break;
+                exit(0);
             default:
                 cout << "Invalid choice";
                 signUp();
