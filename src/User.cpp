@@ -4,9 +4,7 @@
 
 #include "Library.h"
 #include <iostream>
-#include <fstream>
 #include <random>
-#include <sstream>
 #include <map>
 #include <future>
 
@@ -136,6 +134,7 @@ namespace library {
         }
     }
 
+    /* Getters */
 
     string User::getUuid() const {
         return this->uuid;
@@ -143,21 +142,16 @@ namespace library {
     string User::getRole() const {
         return this->role;
     }
-    string User::getUsername() const {
-        return this->username;
-    }
     string User::getPassword() const {
         return this->password;
     }
-    string User::getFirstName() const {
-        return this->firstName;
+
+    /* Setters */
+
+    void User::setBorrowed(string bookUuid) {
+        this->borrowed.push_back(bookUuid);
     }
-    string User::getLastName() const {
-        return this->lastName;
-    }
-    string User::getBirthdate() const {
-        return this->birthdate;
-    }
-    User::~User() {
-    }
+
+    User::~User() = default;
+
 } // user

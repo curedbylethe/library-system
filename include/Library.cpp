@@ -20,7 +20,7 @@ namespace library {
         cin >> choice;
         switch (choice) {
             case 1: {
-                const User user = User::login();
+                 User user = User::login();
                         user.getRole() == "user" ?
                             Library::student(user) :
                             Library::librarian();
@@ -39,7 +39,7 @@ namespace library {
         }
     }
 
-    void Library::student(const User &user) {
+    void Library::student(User &user) {
         cout << "Welcome to the Library";
         cout << "\n1. Search";
         cout << "\n2. Borrow";
@@ -50,7 +50,7 @@ namespace library {
         cin >> choice;
         switch (choice) {
             case 1: {
-                const auto books = Book::searchBook();
+                auto books = Book::searchBook();
                 cout << "Books found: " << books.size() << endl;
                 for (auto &[title, book] : books) {
                     cout << book << endl;
