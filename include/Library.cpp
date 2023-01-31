@@ -11,7 +11,7 @@ using namespace std;
 namespace library {
 
     void Library::start() {
-        cout << "Welcome to the Library";
+        cout << "\nWelcome to the Library";
         cout << "\n1. Login";
         cout << "\n2. Register";
         cout << "\n3. Exit";
@@ -37,7 +37,7 @@ namespace library {
     }
 
     void Library::student(User &user) {
-        cout << "Welcome to the Library";
+        cout << "\nWelcome to the Library";
         cout << "\n1. Search";
         cout << "\n2. Borrow";
         cout << "\n3. Return";
@@ -51,6 +51,10 @@ namespace library {
                 break;
             }
             case 2:
+                if (user.getBorrowed().size() >= 2) {
+                    cout << "You have reached the maximum number of books you can borrow";
+                    student(user);
+                }
                 Book::borrowBook(user);
                 break;
             case 3:
