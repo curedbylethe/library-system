@@ -79,7 +79,7 @@ namespace library {
         /* Helpers */
         static vector<string> split(const string &str, char del);
         static string join(vector<string> v, char delimiter);
-        string trim(string &s);
+        static string trim(string &s);
     };
 
     class Book {
