@@ -55,7 +55,7 @@ namespace library {
     }
 
     User::User(string &uuid, string &role, string &username,
-               string &password, string &firstName, string &lastName, string &birthdate) {
+               string &password, string &firstName, string &lastName, string &birthdate, vector<string> &borrowed) {
         this->uuid = uuid;
         this->username = username;
         this->password = password;
@@ -63,6 +63,9 @@ namespace library {
         this->lastName = lastName;
         this->birthdate = birthdate;
         this->role = role;
+        if (borrowed[0] != "NULL") {
+            this->borrowed = borrowed;
+        }
     }
 
     map<string, User> User::loadUsersFromFile() {
@@ -83,15 +86,17 @@ namespace library {
     pair<string, User> User::parseUserLine(const string& line) {
         pair<string, User> user_map;
         istringstream iss(line);
-        string uuid, role, username, password, firstname, lastname, birthdate;
+        string uuid, role, username, password, firstname, lastname, birthdate, borrowed;
         getline(iss, uuid, ',');
         getline(iss, role, ',');
         getline(iss, username, ',');
         getline(iss, firstname, ',');
         getline(iss, lastname, ',');
         getline(iss, password, ',');
-        getline(iss, birthdate);
-        const User user(uuid, role, username, password, firstname, lastname, birthdate);
+        getline(iss, birthdate, ',');
+        getline(iss, borrowed);
+        vector<string> borrowedBooks = Library::split(borrowed, '-');
+        const User user(uuid, role, username, password, firstname, lastname, birthdate, borrowedBooks);
         user_map.first = username;
         user_map.second = user;
         return user_map;
@@ -145,11 +150,26 @@ namespace library {
     string User::getPassword() const {
         return this->password;
     }
+    vector<string> User::getBorrowed() const {
+        return this->borrowed;
+    }
 
     /* Setters */
 
-    void User::setBorrowed(string bookUuid) {
+    void User::setBorrowed(const string& bookUuid) {
         this->borrowed.push_back(bookUuid);
+        auto b = this->getBorrowed();
+        string type = "users";
+        string identifier = this->uuid;
+        string column = "borrowed";
+        string value;
+        for (auto &i : b) {
+            if (i == b.back())
+                value += i;
+            else
+                value += i + "-";
+        }
+        Database::setter(type, identifier, column, value);
     }
 
     User::~User() = default;

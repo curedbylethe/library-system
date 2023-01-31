@@ -43,9 +43,9 @@ namespace library {
         User(string &username, string &password, string &firstName,
              string &lastName, string &birthdate);
         User(string &uuid, string &role, string &username,
-             string &password, string &firstName, string &lastName, string &birthdate);
+             string &password, string &firstName, string &lastName, string &birthdate, vector<string> &borrowed);
         static pair<string, User> parseUserLine(const string& line);
-        void setBorrowed(string bookUuid);
+        void setBorrowed(const string& bookUuid);
         [[nodiscard]] static map<string, User> loadUsersFromFile();
         [[nodiscard]] static User login();
 
@@ -53,6 +53,7 @@ namespace library {
         [[nodiscard]] string getUuid() const;
         [[nodiscard]] string getRole() const;
         [[nodiscard]] string getPassword() const;
+        [[nodiscard]] vector<string> getBorrowed() const;
 
         /* Setters */
     };
