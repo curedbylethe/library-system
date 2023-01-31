@@ -69,6 +69,7 @@ namespace library {
     }
 
     void User::returnBook(string bookUuid) {
+        bookUuid = Library::trim(bookUuid);
         for (int i = 0; i < this->borrowed.size(); i++) {
             if (this->borrowed[i] == bookUuid) {
                 this->borrowed.erase(this->borrowed.begin() + i);
