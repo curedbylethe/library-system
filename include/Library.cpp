@@ -27,21 +27,15 @@ namespace library {
             cout << book << endl;
         }
         cin.ignore();
-        cout << "Enter the book ID you wish to return: ";
+        cout << "Enter the book ID you wish to return"
+                "\nYou can enter multiple book IDs separated by a comma:";
         string bookUuid;
         getline(cin, bookUuid);
         vector<string> bookUuids = Library::split(bookUuid, ',');
         for (auto &book: bookUuids) {
             user.returnBook(book);
-            cout << "Do you to return another book? (y/n): ";
-            char y_or_n;
-            cin >> y_or_n;
-            if (y_or_n == 'y') {
-                Library::returnBook(user);
-            } else {
-                student(user);
-            }
         }
+        student(user);
     }
 
     void Library::searchForBooks(User &user) {
