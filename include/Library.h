@@ -23,8 +23,6 @@ namespace library {
         static void setter(string type, string identifier, string column, string value);
         static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
         static int getColumnIndex(const string &type, const string &column);
-
-
         };
 
     class User {
@@ -39,37 +37,26 @@ namespace library {
         vector<string> borrowed;
     public:
         User();
-
         ~User();
-
         User(string &username, string &password, string &firstName,
              string &lastName, string &birthdate);
-
         User(string &uuid, string &role, string &username,
              string &password, string &firstName, string &lastName, string &birthdate, vector<string> &borrowed);
-
-        void setBorrowed(const string &bookUuid);
-
+        [[nodiscard]] static User login();
         void returnBook(string bookUuid);
 
         /* Getters */
         [[nodiscard]] string getUuid() const;
-
         [[nodiscard]] string getRole() const;
-
         [[nodiscard]] string getPassword() const;
-
         [[nodiscard]] vector<string> getBorrowed() const;
 
         /* Setters */
+        void setBorrowed(const string &bookUuid);
 
         /* Helpers */
         static pair<string, User> parseUserLine(const string &line);
-
         [[nodiscard]] static map<string, User> loadUsersFromFile();
-
-        [[nodiscard]] static User login();
-
         string borrowedBooksToString();
     };
 
@@ -78,12 +65,16 @@ namespace library {
         Library();
         ~Library();
         static void signUp();
-        static void student(User &user);
-        static void librarian();
-        static void start();
         static void login();
         static void searchForBooks(User &user);
         static void borrow(User &user);
+
+        /* UI */
+        static void student(User &user);
+        static void librarian();
+        static void start();
+
+        /* Helpers */
         static vector<string> split(const string &str, char del);
         static string join(vector<string> v, char delimiter);
 
@@ -100,8 +91,6 @@ namespace library {
              string &publisher, vector<string> &subjects, string &length, string &year, string &status, string &borrower);
         Book();
         ~Book();
-        [[nodiscard]] static map<string, Book> loadBooksFromFile();
-        [[nodiscard]] static map<string, Book> searchBook();
         static void borrowBook(User& user, map<string, Book> *book_map = nullptr);
 
         /* Getters */
@@ -118,6 +107,8 @@ namespace library {
         /* Helpers */
         friend ostream &operator<<(ostream &out, const Book &book);
         [[nodiscard]] string printAuthors() const;
+        [[nodiscard]] static map<string, Book> loadBooksFromFile();
+        [[nodiscard]] static map<string, Book> searchBook();
     };
 } // library
 

@@ -10,6 +10,40 @@
 using namespace std;
 namespace library {
 
+    void Library::login() {
+        User user = User::login();
+        user.getRole() == "user" ?
+        Library::student(user) :
+        Library::librarian();
+    }
+
+    void Library::searchForBooks(User &user) {
+        auto books = Book::searchBook();
+        cout << "Books found: " << books.size() << endl;
+        for (auto &[title, book] : books) {
+            cout << book << endl;
+        }
+        cout << "Do you want to borrow a book? (y/n): ";
+        char y_or_n;
+        cin >> y_or_n;
+        if (y_or_n == 'y') {
+            Book::borrowBook(user, &books);
+        } else {
+            student(user);
+        }
+
+    }
+
+    void Library::borrow(User &user) {
+        if (user.getBorrowed().size() >= 2) {
+            cout << "You have reached the maximum number of books you can borrow";
+            student(user);
+        }
+        Book::borrowBook(user);
+    }
+
+    /* UI */
+
     void Library::start() {
         cout << "\nWelcome to the Library";
         cout << "\n1. Login";
@@ -155,6 +189,8 @@ namespace library {
         }
     }
 
+    /* Helpers */
+
     vector<string> Library::split(const string &str, char delimiter) {
         vector<string> tokens;
         string token;
@@ -175,39 +211,6 @@ namespace library {
             }
             return result;
     }
-
-    void Library::login() {
-        User user = User::login();
-        user.getRole() == "user" ?
-        Library::student(user) :
-        Library::librarian();
-    }
-
-    void Library::searchForBooks(User &user) {
-        auto books = Book::searchBook();
-        cout << "Books found: " << books.size() << endl;
-        for (auto &[title, book] : books) {
-            cout << book << endl;
-        }
-        cout << "Do you want to borrow a book? (y/n): ";
-        char y_or_n;
-        cin >> y_or_n;
-        if (y_or_n == 'y') {
-            Book::borrowBook(user, &books);
-        } else {
-            student(user);
-        }
-
-    }
-
-    void Library::borrow(User &user) {
-        if (user.getBorrowed().size() >= 2) {
-            cout << "You have reached the maximum number of books you can borrow";
-            student(user);
-        }
-        Book::borrowBook(user);
-    }
-
 
     Library::Library() = default;
 
