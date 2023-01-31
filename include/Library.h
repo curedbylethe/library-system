@@ -14,6 +14,19 @@
 using namespace std;
 namespace library {
 
+    class Database {
+    public:
+        Database();
+        ~Database();
+        static void insertUser(string &username, string &firstName, string &lastName,
+                               string &password, string &birthdate, string &role);
+        static void setter(string &type, string &identifier, string &column, string &value);
+        static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
+        static int getColumnIndex(const string &type, const string &column);
+
+
+        };
+
     class User {
     private:
         string uuid;
@@ -23,51 +36,39 @@ namespace library {
         string firstName;
         string lastName;
         string birthdate;
+        vector<string> borrowed;
     public:
+        User();
+        ~User();
         User(string &username, string &password, string &firstName,
              string &lastName, string &birthdate);
         User(string &uuid, string &role, string &username,
              string &password, string &firstName, string &lastName, string &birthdate);
-        User();
-        ~User();
         static pair<string, User> parseUserLine(const string& line);
-        [[nodiscard]]  static map<string, User> loadUsersFromFile();
+        void setBorrowed(string bookUuid);
+        [[nodiscard]] static map<string, User> loadUsersFromFile();
         [[nodiscard]] static User login();
 
         /* Getters */
         [[nodiscard]] string getUuid() const;
         [[nodiscard]] string getRole() const;
-        [[nodiscard]] string getUsername() const;
         [[nodiscard]] string getPassword() const;
-        [[nodiscard]] string getFirstName() const;
-        [[nodiscard]] string getLastName() const;
-        [[nodiscard]] string getBirthdate() const;
-    };
 
+        /* Setters */
+    };
 
     class Library {
     public:
         Library();
         ~Library();
         static void signUp();
-        static void student(const User &user);
+        static void student(User &user);
         static void librarian();
         static void start();
         static vector<string> split(const string &str, char del);
         static string join(vector<string> v, char delimiter);
 
     };
-
-    class Database {
-    public:
-        Database();
-        ~Database();
-        static void insertUser(string &username, string &firstName, string &lastName,
-                               string &password, string &birthdate, string &role);
-        static void insertBook();
-        static void setter(string &type, string &identifier, string &column, string &value);
-    };
-
 
     class Book {
     private:
@@ -82,34 +83,18 @@ namespace library {
         ~Book();
         [[nodiscard]] static map<string, Book> loadBooksFromFile();
         [[nodiscard]] static map<string, Book> searchBook();
-        static void borrowBook(const User &user, const map<string, Book> *book_map = nullptr);
-//        [[nodiscard]] static Book returnBook(const map<string, Book>& book_map);
+        static void borrowBook(User& user, map<string, Book> *book_map = nullptr);
 
         /* Getters */
         [[nodiscard]] string getTitle() const;
         [[nodiscard]] string getEdition() const;
-        [[nodiscard]] string getPublisher() const;
-        [[nodiscard]] string getYear() const;
-        [[nodiscard]] string getShelfNum() const;
-        [[nodiscard]] string getLength() const;
         [[nodiscard]] string getStatus() const;
-        [[nodiscard]] string getBorrower() const;
-        [[nodiscard]] vector<string> getSubjects() const;
         [[nodiscard]] vector<string> getAuthors() const;
         [[nodiscard]] string getIsbn() const;
 
         /* Setters */
-        void setTitle(string &t);
-        void setEdition(string &e);
-        void setPublisher(string &p);
-        void setYear(string &y);
-        void setShelfNum(string &sheNum);
-        void setLength(string &l);
-        void setStatus(auto &s);
-        void setBorrower(auto b);
-        void setSubjects(vector<string> &subs);
-        void setAuthors(vector<string> &a);
-        void setIsbn(string &id);
+        void setStatus(const string& s);
+        void setBorrower(const string& b);
 
         /* Helpers */
         friend ostream &operator<<(ostream &out, const Book &book);
