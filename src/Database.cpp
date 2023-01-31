@@ -32,7 +32,7 @@ namespace library {
         fileOut.close();
     }
 
-    void Database::setter(string &type, string &identifier, string &column, string &value) {
+    void Database::setter(string type, string identifier, string column, string value) {
         int columnIndex = -1;
 
         try {
@@ -90,7 +90,7 @@ namespace library {
         string line;
         while (getline(dataFile, line)) {
             auto fields = Library::split(line, ',');
-            if (fields[0] == identifier) {
+            if (fields[0] == identifier || fields[1] == identifier || fields[6] == identifier) {
                 fields[columnIndex] = value;
             }
             tempFile << Library::join(fields, ',') << endl;
