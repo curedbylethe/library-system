@@ -55,16 +55,6 @@ namespace library {
         string borrowedBooksToString();
     };
 
-    class Database {
-    public:
-        Database();
-        ~Database();
-        static void insertUser(User &user);
-        static void setter(string type, string identifier, string column, string value);
-        static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
-        static int getColumnIndex(const string &type, const string &column);
-    };
-
     class Library {
     public:
         Library();
@@ -74,10 +64,14 @@ namespace library {
         static void searchForBooks(User &user);
         static void borrow(User &user);
         static void returnBook(User &user);
+        static void addNewBook();
+        static void removeBook();
+        static void removeUser();
+        static void addUser(User &admin);
 
         /* UI */
         static void student(User &user);
-        static void librarian();
+        static void librarian(User &user);
         static void start();
 
         /* Helpers */
@@ -93,9 +87,11 @@ namespace library {
         vector<string> authors;
         vector<string> subjects;
     public:
-        Book(string &title, vector<string> &authors, string &isbn, string &edition,
-             string &publisher, vector<string> &subjects, string &length, string &year, string &status, string &borrower);
         Book();
+        Book(string &title, string &shelfNum, vector<string> &authors, string &isbn, string &edition,
+             string &publisher, vector<string> &subjects, string &length, string &year, string &status, string &borrower);
+        Book(string &title, string &shelfNum, vector<string> &authors, string &isbn, string &edition,
+             string &publisher, vector<string> &subjects, string &length, string &year);
         ~Book();
         static void borrowBook(User& user, map<string, Book> *book_map = nullptr);
 
@@ -105,6 +101,11 @@ namespace library {
         [[nodiscard]] string getStatus() const;
         [[nodiscard]] vector<string> getAuthors() const;
         [[nodiscard]] string getIsbn() const;
+        [[nodiscard]] string getPublisher() const;
+        [[nodiscard]] string getPublishedYear() const;
+        [[nodiscard]] string getLength() const;
+        [[nodiscard]] vector<string> getSubjects() const;
+        [[nodiscard]] string getShelfNum() const;
 
         /* Setters */
         void setStatus(const string& s);
@@ -115,6 +116,18 @@ namespace library {
         [[nodiscard]] string printAuthors() const;
         [[nodiscard]] static map<string, Book> loadBooksFromFile();
         [[nodiscard]] static map<string, Book> searchBook();
+    };
+
+    class Database {
+    public:
+        Database();
+        ~Database();
+        static void insertUser(User &user);
+        static void insertBook(Book &book);
+        static void deleteLine(string type, string identifier);
+        static void setter(string type, string identifier, string column, string value);
+        static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
+        static int getColumnIndex(const string &type, const string &column);
     };
 } // library
 
