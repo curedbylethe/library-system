@@ -17,6 +17,29 @@ namespace library {
         Library::librarian();
     }
 
+    void Library::returnBook(User &user) {
+        cout << "Here's the list of books you have borrowed: ";
+        for (auto &book: user.getBorrowed()) {
+            cout << book << endl;
+        }
+        cin.ignore();
+        cout << "Enter the book ID you wish to return: ";
+        string bookUuid;
+        getline(cin, bookUuid);
+        vector<string> bookUuids = Library::split(bookUuid, ',');
+        for (auto &book: bookUuids) {
+            user.returnBook(bookUuid);
+            cout << "Do you to return another book? (y/n): ";
+            char y_or_n;
+            cin >> y_or_n;
+            if (y_or_n == 'y') {
+                Library::returnBook(user);
+            } else {
+                student(user);
+            }
+        }
+    }
+
     void Library::searchForBooks(User &user) {
         auto books = Book::searchBook();
         cout << "Books found: " << books.size() << endl;
@@ -31,7 +54,6 @@ namespace library {
         } else {
             student(user);
         }
-
     }
 
     void Library::borrow(User &user) {
@@ -40,6 +62,35 @@ namespace library {
             student(user);
         }
         Book::borrowBook(user);
+        if (user.getBorrowed().size() < 2) {
+            cout << "Do you want to borrow another book? (y/n): ";
+            char y_or_n;
+            cin >> y_or_n;
+            if (y_or_n == 'y') {
+                borrow(user);
+            } else {
+                cout << "Do you wish to return a book? (y/n): ";
+                cin >> y_or_n;
+                if (y_or_n == 'y') {
+                    Library::returnBook(user);
+                } else {
+                    student(user);
+                }
+            }
+        } else {
+            cout << "You can borrow any more books."
+                    "\nExit the program by entering e or go back to the main menu by entering m: " << endl;
+            char e_or_m;
+            cin >> e_or_m;
+            if (e_or_m == 'e') {
+                exit(0);
+            } else if (e_or_m == 'm') {
+                student(user);
+            } else {
+                cout << "Invalid choice";
+                student(user);
+            }
+        }
     }
 
     /* UI */
@@ -55,7 +106,6 @@ namespace library {
         switch (choice) {
             case 1: {
                 Library::login();
-                break;
             }
             case 2:
                 signUp();
@@ -82,25 +132,11 @@ namespace library {
         switch (choice) {
             case 1: {
                 Library::searchForBooks(user);
-                break;
             }
             case 2:
                 Library::borrow(user);
-                break;
             case 3: {
-                cout << "Here's the list of books you have borrowed: ";
-                for (auto &book: user.getBorrowed()) {
-                    cout << book << endl;
-                }
-                cin.ignore();
-                cout << "Enter the book ID you wish to return (separate by commas): ";
-                string bookUuid;
-                getline(cin, bookUuid);
-                vector<string> bookUuids = Library::split(bookUuid, ',');
-                for (auto &book: bookUuids) {
-                    user.returnBook(bookUuid);
-                }
-                break;
+                Library::returnBook(user);
             }
             case 4:
                 cout << "Exit";
@@ -108,7 +144,6 @@ namespace library {
             default:
                 cout << "Invalid choice";
                 student(user);
-                break;
         }
     }
 

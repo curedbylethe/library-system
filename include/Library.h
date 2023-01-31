@@ -68,6 +68,7 @@ namespace library {
         static void login();
         static void searchForBooks(User &user);
         static void borrow(User &user);
+        static void returnBook(User &user);
 
         /* UI */
         static void student(User &user);
