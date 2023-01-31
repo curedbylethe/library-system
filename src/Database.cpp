@@ -29,6 +29,61 @@ namespace library {
         fileOut.close();
     }
 
+    void Database::insertBook(Book &book) {
+        fileOut.open("../data/books.txt", ios::out | ios::app);
+        if (!fileOut.is_open()) {
+            cout << "Error opening file" << endl;
+            return;
+        }
+
+        fileOut << book.getTitle() << ","
+                << book.getShelfNum() << ",";
+                for (const auto &author : book.getAuthors()) {
+                    if (author != book.getAuthors().back())
+                        fileOut << author << "-";
+                    else
+                    fileOut << author << ",";
+                }
+                fileOut << book.getEdition() << ","
+                << book.getPublisher() << ","
+                << book.getPublishedYear() << ","
+                << book.getIsbn() << ","
+                << book.getLength() << ",";
+                for (const auto &subject : book.getSubjects()) {
+                    if (subject != book.getSubjects().back())
+                        fileOut << subject << "-";
+                    else
+                    fileOut << subject << ",";
+                }
+                fileOut << "free" << ","
+                << "NULL" << endl;
+        fileOut.close();
+    }
+
+    void Database::deleteLine(string type, string identifier) {
+        string fileName = (type == "users") ? "../data/users.txt" : "../data/books.txt";
+        ifstream inputFile(fileName);
+        vector<string> lines;
+        string line;
+
+        /* This function reads the file line by line and saves      *
+         * the line where the identifier isn't matched and rewrites *
+         * the file using only those line                           */
+        while (getline(inputFile, line)) {
+            if (line.find(identifier) == string::npos) {
+                lines.push_back(line);
+            }
+        }
+
+        inputFile.close();
+
+        std::ofstream outputFile(fileName);
+        for (const auto& l : lines) {
+            outputFile << l << '\n';
+        }
+        outputFile.close();
+    }
+
     void Database::setter(string type, string identifier, string column, string value) {
         int columnIndex = -1;
 

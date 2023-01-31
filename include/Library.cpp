@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <sstream>
 
 using namespace std;
 namespace library {
@@ -15,7 +14,7 @@ namespace library {
         User user = User::login();
         user.getRole() == "user" ?
         Library::student(user) :
-        Library::librarian();
+        Library::librarian(user);
     }
 
     void Library::returnBook(User &user) {
@@ -92,6 +91,46 @@ namespace library {
         }
     }
 
+    void Library::addNewBook() {
+        string title, shelfNum, authorsStr, edition, publisher, publishedYear, isbn, length, subjectsStr ;
+        cout << " ******* Add A New Book *******\n";
+        cout << "Enter Title: ";
+        cin >> title;
+        cin.ignore();
+        cout << "Enter Shelf Number ";
+        cin >> shelfNum;
+        cin.ignore();
+        cout << "Enter Authors (separate by commas if more than one): ";
+        getline(cin, authorsStr);
+        cin.ignore();
+        vector<string> authors = Library::split(authorsStr, ',');
+        for (auto &author: authors) {
+            author = Library::trim(author);
+        }
+        cout << "Enter Edition: ";
+        cin >> edition;
+        cin.ignore();
+        cout << "Enter Publisher: ";
+        cin >> publisher;
+        cin.ignore();
+        cout << "Enter Published Year: ";
+        cin >> publishedYear;
+        cout << "Enter ISBN: ";
+        cin >> isbn;
+        cout << "Enter Length: ";
+        cin >> length;
+        cin.ignore();
+        cout << "Enter Subjects (separate by commas if more than one): ";
+        getline(cin, subjectsStr);
+        vector<string> subjects = Library::split(subjectsStr, ',');
+        for (auto &subject: subjects) {
+            subject = Library::trim(subject);
+        }
+        Book book = Book(title, shelfNum, authors, isbn, edition,
+                         publisher, subjects, length, publishedYear);
+        Database::insertBook(book);
+    }
+
     /* UI */
 
     void Library::start() {
@@ -123,7 +162,8 @@ namespace library {
         cout << "\n1. Search";
         cout << "\n2. Borrow";
         cout << "\n3. Return";
-        cout << "\n4. Exit";
+        cout << "\n4. Log out";
+        cout << "\n5. Exit";
         cout << "\nPlease enter your choice: ";
         int choice;
         cin >> choice;
@@ -137,6 +177,8 @@ namespace library {
                 Library::returnBook(user);
             }
             case 4:
+                Library::start();
+            case 5:
                 exit(0);
             default:
                 cout << "Invalid choice";
@@ -144,35 +186,36 @@ namespace library {
         }
     }
 
-    void Library::librarian() {
+    void Library::librarian(User &user) {
         cout << "Welcome to the Library";
         cout << "\n1. Add Book";
         cout << "\n2. Remove Book";
         cout << "\n3. Add User";
         cout << "\n4. Remove User";
-        cout << "\n5. Exit";
+        cout << "\n5. Log out";
+        cout << "\n6. Exit";
         cout << "\nPlease enter your choice: ";
         int choice;
         cin >> choice;
         switch (choice) {
             case 1:
-                cout << "Add Book";
-                break;
+                Library::addNewBook();
+                Library::librarian(user);
             case 2:
-                cout << "Remove Book";
-                break;
+                Library::removeBook();
+                Library::librarian(user);
             case 3:
-                cout << "Add User";
-                break;
+                Library::addUser(user);
             case 4:
-                cout << "Remove User";
-                break;
+                Library::removeUser();
+                Library::librarian(user);
             case 5:
+                Library::start();
+            case 6:
                 exit(0);
             default:
                 cout << "Invalid choice";
-                librarian();
-                break;
+                librarian(user);
         }
     }
 
@@ -207,17 +250,15 @@ namespace library {
                 string role = "librarian";
                 User user(username, firstName, lastName, password, birthdate, role);
                 Database::insertUser(user);
-                librarian();
+                librarian(user);
             }
             case 3:
                 start();
-                break;
             case 4:
                 exit(0);
             default:
                 cout << "Invalid choice";
                 signUp();
-                break;
         }
     }
 
@@ -252,7 +293,56 @@ namespace library {
             return !isspace(ch);
         }).base(), s.end());
         return s;
+    }
 
+    void Library::removeBook() {
+        cout << "Enter the title or ID Number of the book you want to remove: ";
+        string titleOrId;
+        cin >> titleOrId;
+        Database::deleteLine("books", titleOrId);
+    }
+
+    void Library::removeUser() {
+        cout << "Enter the ID or Username of the user you want to remove: ";
+        string titleOrId;
+        cin >> titleOrId;
+        Database::deleteLine("users", titleOrId);
+    }
+
+    void Library::addUser(User &admin) {
+        string username, firstName, lastName, password, birthdate;
+        cout << " ******* Add User *******";
+        cout << "Enter Username: ";
+        cin >> username;
+        cout << "Enter Your Full Name ";
+        cin >> firstName >> lastName;
+        cout << "Enter Password: ";
+        cin >> password;
+        cout << "Enter Birthdate: ";
+        cin >> birthdate;
+        cout << "Select a role: ";
+        cout << "\n1. User";
+        cout << "\n2. Librarian";
+        cout << "\nPlease enter your choice: ";
+        int choice;
+        cin >> choice;
+        switch (choice) {
+            case 1: {
+                string role = "user";
+                User user(username, password, firstName, lastName, birthdate, role);
+                Database::insertUser(user);
+                librarian(admin);
+            }
+            case 2: {
+                string role = "librarian";
+                User user(username, password, firstName, lastName, birthdate, role);
+                Database::insertUser(user);
+                librarian(admin);
+            }
+            default:
+                cout << "Invalid choice";
+                librarian(admin);
+        }
     }
 
     Library::Library() = default;

@@ -13,11 +13,34 @@ using namespace std;
 namespace library {
     Book::Book() = default;
     Book::~Book() = default;
-    Book::Book(string &t, vector<string> &a, string &is, string &e,
-               string &pub, vector<string> &subs, string &l, string &y, string &stat, string &b) :
-                   title(t), isbn(is), subjects(subs), edition(e), publisher(pub),
-                   year(y), status(stat), borrower(b), length(l), authors(a) {};
-
+    Book::Book(string &title, string &shelfNum, vector<string> &authors, string &isbn, string &edition,
+    string &publisher, vector<string> &subjects, string &length, string &year, string &status, string &borrower) {
+        this->title = title;
+        this->shelfNum = shelfNum;
+        this->authors = authors;
+        this->isbn = isbn;
+        this->edition = edition;
+        this->publisher = publisher;
+        this->subjects = subjects;
+        this->length = length;
+        this->year = year;
+        this->status = status;
+        this->borrower = borrower;
+    }
+    Book::Book(string &title, string &shelfNum, vector<string> &authors, string &isbn, string &edition,
+    string &publisher, vector<string> &subjects, string &length, string &year) {
+        this->title = title;
+        this->shelfNum = shelfNum;
+        this->authors = authors;
+        this->isbn = isbn;
+        this->edition = edition;
+        this->publisher = publisher;
+        this->subjects = subjects;
+        this->length = length;
+        this->year = year;
+        this->status = "free";
+        this->borrower = "";
+    }
 
     void Book::borrowBook(User& user, map<string, Book> *book_map) {
         auto future = async(launch::async, &Book::loadBooksFromFile);
@@ -68,17 +91,29 @@ namespace library {
     string Book::getIsbn() const {
         return this->isbn;
     }
-
     string Book::getStatus() const {
         return this->status;
     }
-
     string Book::getTitle() const {
         return this->title;
     }
-
     string Book::getEdition() const {
         return this->edition;
+    }
+    string Book::getPublisher() const {
+        return this->publisher;
+    }
+    string Book::getPublishedYear() const {
+        return this->year;
+    }
+    string Book::getLength() const {
+        return this->length;
+    }
+    vector<string> Book::getSubjects() const {
+        return this->subjects;
+    }
+    string Book::getShelfNum() const {
+        return this->shelfNum;
     }
 
     /* Setter */
@@ -135,7 +170,7 @@ namespace library {
             vector<string> subjectsVect = Library::split(subjects, '-');
             vector<string> authorsVect = Library::split(authors, '-');
 
-            Book book(title, authorsVect, isbn, edition, publisher, subjectsVect, length, year, status, borrower);
+            Book book(title, shelfNum, authorsVect, isbn, edition, publisher, subjectsVect, length, year, status, borrower);
             books_map[title] = book;
         }
         return books_map;
