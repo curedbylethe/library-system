@@ -68,40 +68,21 @@ namespace library {
         }
     }
 
-    map<string, User> User::loadUsersFromFile() {
-        map<string, User> user_map;
-        ifstream file("../data/users.txt");
-        if (!file.is_open()) {
-            throw runtime_error("Failed to open file");
+    void User::returnBook(string bookUuid) {
+        for (int i = 0; i < this->borrowed.size(); i++) {
+            if (this->borrowed[i] == bookUuid) {
+                this->borrowed.erase(this->borrowed.begin() + i);
+                break;
+            }
         }
-
-        string line;
-        while (getline(file, line)) {
-            auto it = User::parseUserLine(line);
-            user_map[it.first] = it.second;
+        auto b = this->borrowedBooksToString();
+        if (b == "") {
+            b = "NULL";
         }
-        return user_map;
+        Database::setter("users", this->uuid, "borrowed", b);
+        Database::setter("books", bookUuid, "borrower", "NULL");
+        Database::setter("books", bookUuid, "status", "free");
     }
-
-    pair<string, User> User::parseUserLine(const string& line) {
-        pair<string, User> user_map;
-        istringstream iss(line);
-        string uuid, role, username, password, firstname, lastname, birthdate, borrowed;
-        getline(iss, uuid, ',');
-        getline(iss, role, ',');
-        getline(iss, username, ',');
-        getline(iss, firstname, ',');
-        getline(iss, lastname, ',');
-        getline(iss, password, ',');
-        getline(iss, birthdate, ',');
-        getline(iss, borrowed);
-        vector<string> borrowedBooks = Library::split(borrowed, '-');
-        const User user(uuid, role, username, password, firstname, lastname, birthdate, borrowedBooks);
-        user_map.first = username;
-        user_map.second = user;
-        return user_map;
-    }
-
 
     User User::login() {
         auto future = async(launch::async, &User::loadUsersFromFile);
@@ -158,10 +139,13 @@ namespace library {
 
     void User::setBorrowed(const string& bookUuid) {
         this->borrowed.push_back(bookUuid);
+        auto b = this->borrowedBooksToString();
+        Database::setter("users", this->getUuid(), "borrowed", b);
+    }
+
+    /* Helpers */
+    string User::borrowedBooksToString() {
         auto b = this->getBorrowed();
-        string type = "users";
-        string identifier = this->uuid;
-        string column = "borrowed";
         string value;
         for (auto &i : b) {
             if (i == b.back())
@@ -169,7 +153,41 @@ namespace library {
             else
                 value += i + "-";
         }
-        Database::setter(type, identifier, column, value);
+        return value;
+    }
+
+    map<string, User> User::loadUsersFromFile() {
+        map<string, User> user_map;
+        ifstream file("../data/users.txt");
+        if (!file.is_open()) {
+            throw runtime_error("Failed to open file");
+        }
+
+        string line;
+        while (getline(file, line)) {
+            auto it = User::parseUserLine(line);
+            user_map[it.first] = it.second;
+        }
+        return user_map;
+    }
+
+    pair<string, User> User::parseUserLine(const string& line) {
+        pair<string, User> user_map;
+        istringstream iss(line);
+        string uuid, role, username, password, firstname, lastname, birthdate, borrowed;
+        getline(iss, uuid, ',');
+        getline(iss, role, ',');
+        getline(iss, username, ',');
+        getline(iss, firstname, ',');
+        getline(iss, lastname, ',');
+        getline(iss, password, ',');
+        getline(iss, birthdate, ',');
+        getline(iss, borrowed);
+        vector<string> borrowedBooks = Library::split(borrowed, '-');
+        const User user(uuid, role, username, password, firstname, lastname, birthdate, borrowedBooks);
+        user_map.first = username;
+        user_map.second = user;
+        return user_map;
     }
 
     User::~User() = default;

@@ -128,17 +128,11 @@ namespace library {
     /* Setter */
     void Book::setStatus(const string& s) {
         this->status = s;
-        string type = "books";
-        string column = "status";
-        string value = s;
-        Database::setter(type, this->title,column, value);
+        Database::setter("books", this->title, "status", s);
     }
     void Book::setBorrower(const string& b) {
-        this->borrower = b;
-        string type = "books";
-        string column = "borrower";
-        string value = b;
-        Database::setter(type, this->title,column, value);
+        this->borrower = b;;
+        Database::setter("books", this->title, "borrower", b);
     }
     /* Helpers */
     string Book::printAuthors() const {

@@ -53,9 +53,21 @@ namespace library {
             case 2:
                 Library::borrow(user);
                 break;
-            case 3:
-                cout << "Return";
+            case 3: {
+                cout << "Here's the list of books you have borrowed: ";
+                for (auto &book: user.getBorrowed()) {
+                    cout << book << endl;
+                }
+                cin.ignore();
+                cout << "Enter the book ID you wish to return (separate by commas): ";
+                string bookUuid;
+                getline(cin, bookUuid);
+                vector<string> bookUuids = Library::split(bookUuid, ',');
+                for (auto &book: bookUuids) {
+                    user.returnBook(bookUuid);
+                }
                 break;
+            }
             case 4:
                 cout << "Exit";
                 break;

@@ -20,7 +20,7 @@ namespace library {
         ~Database();
         static void insertUser(string &username, string &firstName, string &lastName,
                                string &password, string &birthdate, string &role);
-        static void setter(string &type, string &identifier, string &column, string &value);
+        static void setter(string type, string identifier, string column, string value);
         static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
         static int getColumnIndex(const string &type, const string &column);
 
@@ -39,23 +39,38 @@ namespace library {
         vector<string> borrowed;
     public:
         User();
+
         ~User();
+
         User(string &username, string &password, string &firstName,
              string &lastName, string &birthdate);
+
         User(string &uuid, string &role, string &username,
              string &password, string &firstName, string &lastName, string &birthdate, vector<string> &borrowed);
-        static pair<string, User> parseUserLine(const string& line);
-        void setBorrowed(const string& bookUuid);
-        [[nodiscard]] static map<string, User> loadUsersFromFile();
-        [[nodiscard]] static User login();
+
+        void setBorrowed(const string &bookUuid);
+
+        void returnBook(string bookUuid);
 
         /* Getters */
         [[nodiscard]] string getUuid() const;
+
         [[nodiscard]] string getRole() const;
+
         [[nodiscard]] string getPassword() const;
+
         [[nodiscard]] vector<string> getBorrowed() const;
 
         /* Setters */
+
+        /* Helpers */
+        static pair<string, User> parseUserLine(const string &line);
+
+        [[nodiscard]] static map<string, User> loadUsersFromFile();
+
+        [[nodiscard]] static User login();
+
+        string borrowedBooksToString();
     };
 
     class Library {
