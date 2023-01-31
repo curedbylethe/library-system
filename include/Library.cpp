@@ -110,8 +110,7 @@ namespace library {
                 signUp();
                 break;
             case 3:
-                cout << "Exit";
-                break;
+                exit(0);
             default:
                 cout << "Invalid choice\n";
                 start();
@@ -180,13 +179,13 @@ namespace library {
     void Library::signUp() {
         string username, firstName, lastName, password, birthdate;
         cout << " ******* Add User *******";
-        cout << "\nEnter Username: ";
+        cout << "Enter Username: ";
         cin >> username;
-        cout << "\nEnter Your Name ";
+        cout << "Enter Your Full Name ";
         cin >> firstName >> lastName;
-        cout << "\nEnter Password: ";
+        cout << "Enter Password: ";
         cin >> password;
-        cout << "\nEnter Birthdate: ";
+        cout << "Enter Birthdate: ";
         cin >> birthdate;
 
         cout << "Select a role: ";
@@ -200,13 +199,15 @@ namespace library {
         switch (choice) {
             case 1: {
                 string role = "user";
-                Database::insertUser(username, firstName, lastName, password, birthdate, role);
-                break;
+                User user(username, firstName, lastName, password, birthdate, role);
+                Database::insertUser(user);
+                student(user);
             }
             case 2: {
                 string role = "librarian";
-                Database::insertUser(username, firstName, lastName, password, birthdate, role);
-                break;
+                User user(username, firstName, lastName, password, birthdate, role);
+                Database::insertUser(user);
+                librarian();
             }
             case 3:
                 start();

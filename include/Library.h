@@ -15,17 +15,6 @@
 using namespace std;
 namespace library {
 
-    class Database {
-    public:
-        Database();
-        ~Database();
-        static void insertUser(string &username, string &firstName, string &lastName,
-                               string &password, string &birthdate, string &role);
-        static void setter(string type, string identifier, string column, string value);
-        static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
-        static int getColumnIndex(const string &type, const string &column);
-        };
-
     class User {
     private:
         string uuid;
@@ -40,7 +29,7 @@ namespace library {
         User();
         ~User();
         User(string &username, string &password, string &firstName,
-             string &lastName, string &birthdate);
+             string &lastName, string &birthdate, string &role);
         User(string &uuid, string &role, string &username,
              string &password, string &firstName, string &lastName, string &birthdate, vector<string> &borrowed);
         [[nodiscard]] static User login();
@@ -48,9 +37,14 @@ namespace library {
 
         /* Getters */
         [[nodiscard]] string getUuid() const;
+        [[nodiscard]] string getUsername() const;
+        [[nodiscard]] string getFirstName() const;
+        [[nodiscard]] string getLastName() const;
+        [[nodiscard]] string getBirthdate() const;
         [[nodiscard]] string getRole() const;
         [[nodiscard]] string getPassword() const;
         [[nodiscard]] vector<string> getBorrowed() const;
+
 
         /* Setters */
         void setBorrowed(const string &bookUuid);
@@ -59,6 +53,16 @@ namespace library {
         static pair<string, User> parseUserLine(const string &line);
         [[nodiscard]] static map<string, User> loadUsersFromFile();
         string borrowedBooksToString();
+    };
+
+    class Database {
+    public:
+        Database();
+        ~Database();
+        static void insertUser(User &user);
+        static void setter(string type, string identifier, string column, string value);
+        static void updateDataFile(const string &type, const string &identifier, int columnIndex, const string &value);
+        static int getColumnIndex(const string &type, const string &column);
     };
 
     class Library {

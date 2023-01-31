@@ -31,7 +31,7 @@ namespace library {
     }
 
     User::User(string &username, string &password, string &firstName,
-               string &lastName, string& birthdate) {
+               string &lastName, string& birthdate, string &role) {
         random_device rd;
         mt19937 gen(rd());
         mt19937::result_type seed = rd();
@@ -52,6 +52,7 @@ namespace library {
         this->lastName = lastName;
         this->birthdate = birthdate;
         this->uuid = ss.str();
+        this->role = role;
     }
 
     User::User(string &uuid, string &role, string &username,
@@ -122,7 +123,6 @@ namespace library {
     }
 
     /* Getters */
-
     string User::getUuid() const {
         return this->uuid;
     }
@@ -135,9 +135,21 @@ namespace library {
     vector<string> User::getBorrowed() const {
         return this->borrowed;
     }
+    string User::getUsername() const {
+        return this->username;
+    }
+    string User::getFirstName() const {
+        return this->firstName;
+    }
+    string User::getLastName() const {
+        return this->lastName;
+    }
+    string User::getBirthdate() const {
+        return this->birthdate;
+    }
+
 
     /* Setters */
-
     void User::setBorrowed(const string& bookUuid) {
         this->borrowed.push_back(bookUuid);
         auto b = this->borrowedBooksToString();

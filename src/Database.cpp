@@ -11,23 +11,20 @@ using namespace std;
 namespace library {
     ofstream fileOut;
 
-    void Database::insertUser(string &username, string &firstName, string &lastName,
-                              string &password, string &birthdate, string &role) {
+    void Database::insertUser(User &user) {
         fileOut.open("../data/users.txt", ios::out | ios::app);
         if (!fileOut.is_open()) {
             cout << "Error opening file" << endl;
             return;
         }
 
-        User user(username, password, firstName, lastName, birthdate);
-
         fileOut << user.getUuid() << ","
-                << role << ","
-                << username << ","
-                << firstName << ","
-                << lastName << ","
-                << password << ","
-                << birthdate << ","
+                << user.getRole() << ","
+                << user.getUsername() << ","
+                << user.getFirstName() << ","
+                << user.getLastName() << ","
+                << user.getPassword() << ","
+                << user.getBirthdate() << ","
                 << "NULL" << endl;
         fileOut.close();
     }
