@@ -18,6 +18,10 @@ namespace library {
     }
 
     void Library::returnBook(User &user) {
+        if (user.getBorrowed().empty()) {
+            cout << "You have not borrowed any books";
+            student(user);
+        }
         cout << "Here's the list of books you have borrowed: ";
         for (auto &book: user.getBorrowed()) {
             cout << book << endl;
